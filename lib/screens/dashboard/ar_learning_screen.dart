@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
+import 'package:pathshala_dashboard/widgets/gradient_scaffold.dart';
 
 class ARLearningScreen extends StatefulWidget {
   const ARLearningScreen({super.key});
@@ -32,7 +33,7 @@ class _ARLearningScreenState extends State<ARLearningScreen> {
             )
             .toList();
 
-    return Scaffold(
+    return GradientScaffold(
       appBar: AppBar(title: const Text("AR Learning")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

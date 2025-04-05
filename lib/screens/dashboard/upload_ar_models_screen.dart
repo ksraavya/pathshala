@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:pathshala_dashboard/widgets/gradient_scaffold.dart';
 
 class UploadARModelScreen extends StatefulWidget {
   const UploadARModelScreen({Key? key}) : super(key: key);
@@ -40,7 +41,7 @@ class _UploadARModelScreenState extends State<UploadARModelScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return GradientScaffold(
       appBar: AppBar(
         title: const Text('AR Models'),
         actions: [

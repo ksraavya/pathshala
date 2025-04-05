@@ -31,7 +31,7 @@ class _TeacherLoginState extends State<TeacherLogin> {
                 image: DecorationImage(image: AssetImage("assets/images/teacher_bg.png"), fit: BoxFit.cover),
               ),
               child: Container(
-                color: Colors.black.withOpacity(0.5), // Dim overlay
+                color: Colors.black.withOpacity(0.7), // Dim overlay
               ),
             ),
           ),

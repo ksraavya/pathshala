@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pathshala_dashboard/widgets/gradient_scaffold.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
@@ -16,9 +17,13 @@ class _StudentDashboardState extends State<StudentDashboard> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   final Map<DateTime, List<String>> _events = {
-    DateTime.utc(2025, 3, 30): ['Math Class at 10 AM'],
-    DateTime.utc(2025, 4, 1): ['Physics Class at 2 PM'],
+    DateTime.utc(2025, 4, 8): ['Math Class at 10 AM'],
+    DateTime.utc(2025, 4, 15): ['Physics Class at 2 PM'],
   };
+
+  // Subject names for the line chart legend
+  final List<String> subjects = ['Math', 'English', 'Chemistry', 'Physics'];
+  final List<Color> subjectColors = [Colors.blue, Colors.green, Colors.orange, Colors.purple];
 
   List<String> _getEventsForDay(DateTime day) {
     return _events.entries.firstWhere((entry) => isSameDay(entry.key, day), orElse: () => MapEntry(day, [])).value;
@@ -30,7 +35,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
     final screenWidth = MediaQuery.of(context).size.width;
     final isSmallScreen = screenWidth < 600;
 
-    return Scaffold(
+    return GradientScaffold(
       body: Stack(
         children: [
           // Main Content
@@ -46,12 +51,12 @@ class _StudentDashboardState extends State<StudentDashboard> {
                       "Student Dashboard",
                       style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.blueGrey[800]),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
                     // Improved Cards Layout - One card per line for mobile
                     ..._buildStatCardsColumn(),
 
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
                     // Class Schedule
                     Container(
@@ -59,10 +64,10 @@ class _StudentDashboardState extends State<StudentDashboard> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
-                          BoxShadow(color: Colors.black12, blurRadius: 10, spreadRadius: 2, offset: Offset(0, 4)),
+                          BoxShadow(color: Colors.black12, blurRadius: 10, spreadRadius: 2, offset: const Offset(0, 4)),
                         ],
                       ),
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -70,12 +75,12 @@ class _StudentDashboardState extends State<StudentDashboard> {
                             "Class Schedule",
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blueGrey[800]),
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           _buildResponsiveCalendar(isSmallScreen),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           if (_selectedDay != null && _getEventsForDay(_selectedDay!).isNotEmpty)
                             Container(
-                              padding: EdgeInsets.all(12),
+                              padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
                                 color: Colors.blue.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(12),
@@ -84,17 +89,17 @@ class _StudentDashboardState extends State<StudentDashboard> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Events for ${_selectedDay!.day}/${_selectedDay!.month}/${_selectedDay!.year}:",
+                                    "Events for ${DateFormat('MMM d, yyyy').format(_selectedDay!)}:",
                                     style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey[800]),
                                   ),
-                                  SizedBox(height: 8),
+                                  const SizedBox(height: 8),
                                   ..._getEventsForDay(_selectedDay!).map(
                                     (event) => Padding(
-                                      padding: EdgeInsets.symmetric(vertical: 4.0),
+                                      padding: const EdgeInsets.symmetric(vertical: 4.0),
                                       child: Row(
                                         children: [
-                                          Icon(Icons.event, color: Colors.redAccent, size: 16),
-                                          SizedBox(width: 8),
+                                          const Icon(Icons.event, color: Colors.redAccent, size: 18),
+                                          const SizedBox(width: 8),
                                           Expanded(
                                             child: Text(
                                               event,
@@ -115,18 +120,18 @@ class _StudentDashboardState extends State<StudentDashboard> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
-                    // Test Performance Line Chart
+                    // Test Performance Line Chart - Improved!
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
-                          BoxShadow(color: Colors.black12, blurRadius: 10, spreadRadius: 2, offset: Offset(0, 4)),
+                          BoxShadow(color: Colors.black12, blurRadius: 10, spreadRadius: 2, offset: const Offset(0, 4)),
                         ],
                       ),
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -134,16 +139,19 @@ class _StudentDashboardState extends State<StudentDashboard> {
                             "Test Performance",
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blueGrey[800]),
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 12),
+                          // Add Legend for better understanding
+                          _buildChartLegend(),
+                          const SizedBox(height: 16),
                           SizedBox(
-                            height: 240,
+                            height: 260,
                             width: double.infinity,
-                            child: _buildTestPerformanceChart(isSmallScreen),
+                            child: _buildImprovedTestPerformanceChart(isSmallScreen),
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
                     // Learning Activities (Progress) Section
                     Container(
@@ -151,10 +159,10 @@ class _StudentDashboardState extends State<StudentDashboard> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
-                          BoxShadow(color: Colors.black12, blurRadius: 10, spreadRadius: 2, offset: Offset(0, 4)),
+                          BoxShadow(color: Colors.black12, blurRadius: 10, spreadRadius: 2, offset: const Offset(0, 4)),
                         ],
                       ),
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -162,23 +170,23 @@ class _StudentDashboardState extends State<StudentDashboard> {
                             "Learning Activities",
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blueGrey[800]),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Row(
                             children: [
-                              Icon(Icons.arrow_upward, color: Colors.green),
-                              SizedBox(width: 4),
+                              const Icon(Icons.arrow_upward, color: Colors.green, size: 20),
+                              const SizedBox(width: 4),
                               Text(
                                 "35% more activities this month",
-                                style: TextStyle(color: Colors.green, fontWeight: FontWeight.w500),
+                                style: const TextStyle(color: Colors.green, fontWeight: FontWeight.w500),
                               ),
                             ],
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           _buildActivityTimeline(),
                         ],
                       ),
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
                     // Attendance Graph
                     Container(
@@ -186,10 +194,10 @@ class _StudentDashboardState extends State<StudentDashboard> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
-                          BoxShadow(color: Colors.black12, blurRadius: 10, spreadRadius: 2, offset: Offset(0, 4)),
+                          BoxShadow(color: Colors.black12, blurRadius: 10, spreadRadius: 2, offset: const Offset(0, 4)),
                         ],
                       ),
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -197,7 +205,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                             "Attendance Overview",
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blueGrey[800]),
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           SizedBox(
                             height: 240,
                             width: double.infinity,
@@ -290,7 +298,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                                               (value, meta) => Padding(
                                                 padding: const EdgeInsets.only(top: 8.0),
                                                 child: Text(
-                                                  ["M", "T", "W", "T", "F"][value.toInt() - 1],
+                                                  ["Mon", "Tue", "Wed", "Thu", "Fri"][value.toInt() - 1],
                                                   style: TextStyle(
                                                     color: Colors.blueGrey[600],
                                                     fontWeight: FontWeight.w500,
@@ -300,10 +308,13 @@ class _StudentDashboardState extends State<StudentDashboard> {
                                               ),
                                         ),
                                       ),
-                                      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                                      topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                                      rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                                     ),
-                                    borderData: FlBorderData(show: false),
+                                    borderData: FlBorderData(
+                                      show: true,
+                                      border: Border(bottom: BorderSide(color: Colors.grey.withOpacity(0.4), width: 1)),
+                                    ),
                                     gridData: FlGridData(
                                       show: true,
                                       horizontalInterval: 20,
@@ -316,10 +327,18 @@ class _StudentDashboardState extends State<StudentDashboard> {
                               },
                             ),
                           ),
+                          // Day of week legend explanation
+                          const SizedBox(height: 8),
+                          Text(
+                            "Days of the week",
+                            style: TextStyle(fontSize: 12, color: Colors.blueGrey[600], fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.center,
+                          ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 30),
+                    // Add extra space at the bottom to prevent overflow
+                    const SizedBox(height: 100),
                   ],
                 ),
               ),
@@ -330,6 +349,31 @@ class _StudentDashboardState extends State<StudentDashboard> {
           CustomSidebar(userType: 'student'),
         ],
       ),
+    );
+  }
+
+  // Build chart legend
+  Widget _buildChartLegend() {
+    return Wrap(
+      spacing: 16,
+      runSpacing: 8,
+      children: List.generate(subjects.length, (index) {
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 14, // Slightly bigger
+              height: 14, // Slightly bigger
+              decoration: BoxDecoration(color: subjectColors[index], shape: BoxShape.circle),
+            ),
+            const SizedBox(width: 4),
+            Text(
+              subjects[index],
+              style: TextStyle(fontSize: 12, color: Colors.blueGrey[600], fontWeight: FontWeight.w500),
+            ),
+          ],
+        );
+      }),
     );
   }
 
@@ -371,19 +415,19 @@ class _StudentDashboardState extends State<StudentDashboard> {
               Column(
                 children: [
                   Container(
-                    width: 40,
-                    height: 40,
+                    width: 46, // Bigger icon
+                    height: 46, // Bigger icon
                     decoration: BoxDecoration(color: activity['color'] as Color, shape: BoxShape.circle),
-                    child: Icon(activity['icon'] as IconData, color: Colors.white, size: 20),
+                    child: Icon(activity['icon'] as IconData, color: Colors.white, size: 24), // Bigger icon
                   ),
                   if (!isLast) Expanded(child: Container(width: 2, color: Colors.grey.withOpacity(0.3))),
                 ],
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               // Activity content
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0),
+                  padding: const EdgeInsets.only(bottom: 24.0), // Increased space between items
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -391,7 +435,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                         activity['title'] as String,
                         style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.blueGrey[800]),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(activity['date'] as String, style: TextStyle(fontSize: 13, color: Colors.blueGrey[500])),
                     ],
                   ),
@@ -404,19 +448,32 @@ class _StudentDashboardState extends State<StudentDashboard> {
     );
   }
 
-  // Test performance line chart
-  Widget _buildTestPerformanceChart(bool isSmallScreen) {
+  // Improved test performance line chart
+  Widget _buildImprovedTestPerformanceChart(bool isSmallScreen) {
+    // Test data
+    final testLabels = ['Test 1', 'Test 2', 'Test 3'];
+
     return LineChart(
       LineChartData(
         gridData: FlGridData(
           show: true,
-          drawVerticalLine: false,
+          drawVerticalLine: true,
           getDrawingHorizontalLine: (value) {
             return FlLine(color: Colors.grey.withOpacity(0.2), strokeWidth: 1);
+          },
+          getDrawingVerticalLine: (value) {
+            return FlLine(color: Colors.grey.withOpacity(0.1), strokeWidth: 1);
           },
         ),
         titlesData: FlTitlesData(
           leftTitles: AxisTitles(
+            axisNameWidget: Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Text(
+                'Score (%)',
+                style: TextStyle(color: Colors.blueGrey[600], fontSize: isSmallScreen ? 10 : 12),
+              ),
+            ),
             sideTitles: SideTitles(
               showTitles: true,
               interval: 20,
@@ -433,15 +490,19 @@ class _StudentDashboardState extends State<StudentDashboard> {
             ),
           ),
           bottomTitles: AxisTitles(
+            axisNameWidget: const Padding(
+              padding: EdgeInsets.only(top: 16.0),
+              child: Text('Assessments', style: TextStyle(color: Colors.blueGrey, fontSize: 12)),
+            ),
             sideTitles: SideTitles(
               showTitles: true,
               getTitlesWidget: (value, meta) {
-                const texts = ['Test 1', 'Test 2', 'Test 3'];
-                if (value.toInt() >= 0 && value.toInt() < texts.length) {
+                final int index = value.toInt();
+                if (index >= 0 && index < testLabels.length) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
-                      texts[value.toInt()],
+                      testLabels[index],
                       style: TextStyle(
                         color: Colors.blueGrey[600],
                         fontWeight: FontWeight.w500,
@@ -455,8 +516,8 @@ class _StudentDashboardState extends State<StudentDashboard> {
               reservedSize: 30,
             ),
           ),
-          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
         ),
         borderData: FlBorderData(
           show: true,
@@ -472,63 +533,78 @@ class _StudentDashboardState extends State<StudentDashboard> {
         lineBarsData: [
           // Math scores
           LineChartBarData(
-            spots: [FlSpot(0, 78), FlSpot(1, 82), FlSpot(2, 87)],
+            spots: const [FlSpot(0, 78), FlSpot(1, 82), FlSpot(2, 87)],
             isCurved: true,
+            curveSmoothness: 0.3,
             color: Colors.blue,
             barWidth: 3,
             isStrokeCapRound: true,
-            dotData: FlDotData(show: true),
-            belowBarData: BarAreaData(show: true, color: Colors.blue.withOpacity(0.1)),
+            dotData: FlDotData(
+              show: true,
+              getDotPainter:
+                  (spot, percent, bar, index) =>
+                      FlDotCirclePainter(radius: 5, color: Colors.white, strokeWidth: 2, strokeColor: Colors.blue),
+            ),
+            belowBarData: BarAreaData(show: false),
           ),
           // English scores
           LineChartBarData(
-            spots: [FlSpot(0, 85), FlSpot(1, 82), FlSpot(2, 89)],
+            spots: const [FlSpot(0, 85), FlSpot(1, 82), FlSpot(2, 89)],
             isCurved: true,
+            curveSmoothness: 0.3,
             color: Colors.green,
             barWidth: 3,
             isStrokeCapRound: true,
-            dotData: FlDotData(show: true),
-            belowBarData: BarAreaData(show: true, color: Colors.green.withOpacity(0.1)),
+            dotData: FlDotData(
+              show: true,
+              getDotPainter:
+                  (spot, percent, bar, index) =>
+                      FlDotCirclePainter(radius: 5, color: Colors.white, strokeWidth: 2, strokeColor: Colors.green),
+            ),
+            belowBarData: BarAreaData(show: false),
           ),
           // Chemistry scores
           LineChartBarData(
-            spots: [FlSpot(0, 70), FlSpot(1, 76), FlSpot(2, 82)],
+            spots: const [FlSpot(0, 70), FlSpot(1, 76), FlSpot(2, 82)],
             isCurved: true,
+            curveSmoothness: 0.3,
             color: Colors.orange,
             barWidth: 3,
             isStrokeCapRound: true,
-            dotData: FlDotData(show: true),
-            belowBarData: BarAreaData(show: true, color: Colors.orange.withOpacity(0.1)),
+            dotData: FlDotData(
+              show: true,
+              getDotPainter:
+                  (spot, percent, bar, index) =>
+                      FlDotCirclePainter(radius: 5, color: Colors.white, strokeWidth: 2, strokeColor: Colors.orange),
+            ),
+            belowBarData: BarAreaData(show: false),
           ),
           // Physics scores
           LineChartBarData(
-            spots: [FlSpot(0, 65), FlSpot(1, 79), FlSpot(2, 85)],
+            spots: const [FlSpot(0, 65), FlSpot(1, 79), FlSpot(2, 85)],
             isCurved: true,
+            curveSmoothness: 0.3,
             color: Colors.purple,
             barWidth: 3,
             isStrokeCapRound: true,
-            dotData: FlDotData(show: true),
-            belowBarData: BarAreaData(show: true, color: Colors.purple.withOpacity(0.1)),
+            dotData: FlDotData(
+              show: true,
+              getDotPainter:
+                  (spot, percent, bar, index) =>
+                      FlDotCirclePainter(radius: 5, color: Colors.white, strokeWidth: 2, strokeColor: Colors.purple),
+            ),
+            belowBarData: BarAreaData(show: false),
           ),
         ],
         lineTouchData: LineTouchData(
           enabled: true,
           touchTooltipData: LineTouchTooltipData(
-            getTooltipColor: (spot) => Colors.blueGrey.shade700.withOpacity(0.8),
+            getTooltipColor: (spot) => Colors.blueGrey.shade800,
+            tooltipRoundedRadius: 8,
+            tooltipPadding: const EdgeInsets.all(8),
             getTooltipItems: (List<LineBarSpot> touchedSpots) {
               return touchedSpots.map((spot) {
-                String subject;
-
-                if (spot.barIndex == 0) {
-                  subject = 'Math';
-                } else if (spot.barIndex == 1) {
-                  subject = 'English';
-                } else if (spot.barIndex == 2) {
-                  subject = 'Chemistry';
-                } else {
-                  subject = 'Physics';
-                }
-
+                final subject = subjects[spot.barIndex];
                 return LineTooltipItem(
                   '$subject: ${spot.y.toInt()}%',
                   const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -558,8 +634,8 @@ class _StudentDashboardState extends State<StudentDashboard> {
       eventLoader: _getEventsForDay,
       calendarStyle: CalendarStyle(
         todayDecoration: BoxDecoration(color: Colors.blueAccent.withOpacity(0.7), shape: BoxShape.circle),
-        selectedDecoration: BoxDecoration(color: Colors.purpleAccent, shape: BoxShape.circle),
-        markerDecoration: BoxDecoration(color: Colors.redAccent, shape: BoxShape.circle),
+        selectedDecoration: const BoxDecoration(color: Colors.purpleAccent, shape: BoxShape.circle),
+        markerDecoration: const BoxDecoration(color: Colors.redAccent, shape: BoxShape.circle),
         // Adjust text size for smaller screens
         defaultTextStyle: TextStyle(fontSize: isSmallScreen ? 12 : 14),
         weekendTextStyle: TextStyle(fontSize: isSmallScreen ? 12 : 14),
@@ -607,40 +683,40 @@ class _StudentDashboardState extends State<StudentDashboard> {
         value: "15:21",
         icon: Icons.schedule,
         backgroundColor: Colors.white,
-        iconBackgroundColor: Color(0xFF303030),
+        iconBackgroundColor: const Color(0xFF1E88E5),
         iconColor: Colors.white,
-        trend: "+12% This Week",
+        trend: "+2 This Week",
         trendColor: Colors.green,
       ),
-      SizedBox(height: 12),
+      const SizedBox(height: 20),
       _mobileStatCard(
         title: "Classes Taken",
         value: "8",
         icon: Icons.bar_chart,
         backgroundColor: Colors.white,
-        iconBackgroundColor: Color(0xFF3498DB),
+        iconBackgroundColor: const Color(0xFF3498DB),
         iconColor: Colors.white,
         trend: "+2 This Week",
         trendColor: Colors.green,
       ),
-      SizedBox(height: 12),
+      const SizedBox(height: 20),
       _mobileStatCard(
         title: "Average Test Score",
         value: "85%",
         icon: Icons.assignment,
         backgroundColor: Colors.white,
-        iconBackgroundColor: Color(0xFF2ECC71),
+        iconBackgroundColor: const Color(0xFF2ECC71),
         iconColor: Colors.white,
         trend: "+14% vs Last Month",
         trendColor: Colors.green,
       ),
-      SizedBox(height: 12),
+      const SizedBox(height: 20),
       _mobileStatCard(
         title: "Rank",
         value: "12",
         icon: Icons.people,
         backgroundColor: Colors.white,
-        iconBackgroundColor: Color(0xFFE74C3C),
+        iconBackgroundColor: const Color(0xFFE74C3C),
         iconColor: Colors.white,
         trend: "+3 Spots Up",
         trendColor: Colors.green,
@@ -650,7 +726,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
     return cards;
   }
 
-  // Mobile-friendly stat card (one card per line)
+  // Mobile-friendly stat card with overlapping circular icon (half on card, half on background)
   Widget _mobileStatCard({
     required String title,
     required String value,
@@ -663,27 +739,38 @@ class _StudentDashboardState extends State<StudentDashboard> {
   }) {
     return SizedBox(
       width: double.infinity,
-      height: 80,
+      height: 110, // Increased height to fix overflow
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           // Main card
-          Container(
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10, spreadRadius: 2, offset: Offset(0, 4))],
-            ),
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(75, 16, 16, 16),
+          Positioned(
+            top: 25, // Push card down to allow icon to overlap
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Container(
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  const BoxShadow(color: Colors.black12, blurRadius: 10, spreadRadius: 2, offset: Offset(0, 4)),
+                ],
+              ),
+              padding: const EdgeInsets.fromLTRB(80, 12, 16, 12), // Increased left padding for bigger icon
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Text(title, style: TextStyle(fontSize: 14, color: Colors.blueGrey[600])),
+                  const SizedBox(height: 6),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(title, style: TextStyle(fontSize: 14, color: Colors.blueGrey[600])),
+                      Text(
+                        value,
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blueGrey[800]),
+                      ),
                       if (trend != null)
                         Text(
                           trend,
@@ -695,30 +782,23 @@ class _StudentDashboardState extends State<StudentDashboard> {
                         ),
                     ],
                   ),
-                  SizedBox(height: 4),
-                  Text(value, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.blueGrey[800])),
                 ],
               ),
             ),
           ),
-
-          // Overlapping icon
+          // Overlapping circular icon that sits half on card, half on background
           Positioned(
-            left: 0,
-            top: 50 - 25, // Center vertically
+            left: 20,
+            top: 0,
             child: Container(
-              padding: EdgeInsets.all(12),
+              width: 50,
+              height: 50,
               decoration: BoxDecoration(
                 color: iconBackgroundColor,
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(12),
-                  bottomRight: Radius.circular(12),
-                  topLeft: Radius.circular(16),
-                  bottomLeft: Radius.circular(16),
-                ),
+                shape: BoxShape.circle,
                 boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 6, spreadRadius: 1, offset: Offset(0, 2))],
               ),
-              child: Icon(icon, color: iconColor, size: 26),
+              child: Center(child: Icon(icon, color: iconColor, size: 25)),
             ),
           ),
         ],

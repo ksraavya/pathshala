@@ -30,7 +30,7 @@ class _TeacherSignupState extends State<TeacherSignup> {
             decoration: BoxDecoration(
               image: DecorationImage(image: AssetImage("assets/images/teacher_bg.png"), fit: BoxFit.cover),
             ),
-            child: Container(color: Colors.black.withOpacity(0.5)),
+            child: Container(color: Colors.black.withOpacity(0.7)),
           ),
 
           Center(

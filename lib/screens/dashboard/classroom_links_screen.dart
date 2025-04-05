@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pathshala_dashboard/widgets/gradient_scaffold.dart';
 import 'package:video_player/video_player.dart';
 
 class ClassroomLinksScreen extends StatelessWidget {
@@ -6,7 +7,7 @@ class ClassroomLinksScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return GradientScaffold(
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(

@@ -31,7 +31,7 @@ class _StudentLoginState extends State<StudentLogin> {
                 image: DecorationImage(image: AssetImage("assets/images/student_bg.png"), fit: BoxFit.cover),
               ),
               child: Container(
-                color: Colors.black.withOpacity(0.2), // Dim overlay
+                color: Colors.black.withOpacity(0.5), // Dim overlay
               ),
             ),
           ),

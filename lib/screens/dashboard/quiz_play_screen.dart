@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pathshala_dashboard/widgets/gradient_scaffold.dart';
 
 class QuizPlayScreen extends StatefulWidget {
   final String subject;
@@ -384,7 +385,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return GradientScaffold(
       appBar: AppBar(title: Text("${widget.subject} Quiz")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

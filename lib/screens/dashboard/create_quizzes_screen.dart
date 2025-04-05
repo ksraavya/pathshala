@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pathshala_dashboard/widgets/gradient_scaffold.dart';
 import 'quiz_creation_screen.dart';
 
 class CreateQuizzesScreen extends StatelessWidget {
@@ -6,7 +7,7 @@ class CreateQuizzesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return GradientScaffold(
       appBar: AppBar(title: const Text('Create Quizzes'), backgroundColor: Colors.blue, foregroundColor: Colors.white),
       body: SafeArea(
         child: Padding(

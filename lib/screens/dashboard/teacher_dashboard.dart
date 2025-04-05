@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:pathshala_dashboard/widgets/gradient_scaffold.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:pathshala_dashboard/widgets/custom_sidebar.dart';
 
@@ -102,8 +103,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[100],
+    return GradientScaffold(
       body: Stack(
         children: [
           // Main content

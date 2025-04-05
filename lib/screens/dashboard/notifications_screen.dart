@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pathshala_dashboard/widgets/gradient_scaffold.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -38,7 +39,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return GradientScaffold(
       appBar: AppBar(title: Text("Notifications")),
       body: Padding(
         padding: const EdgeInsets.all(10.0),

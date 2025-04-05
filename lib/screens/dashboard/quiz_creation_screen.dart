@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pathshala_dashboard/widgets/gradient_scaffold.dart';
 
 class Question {
   String question;
@@ -52,7 +53,7 @@ class _QuizCreationScreenState extends State<QuizCreationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return GradientScaffold(
       appBar: AppBar(
         title: Text('${widget.subject} Quiz'),
         backgroundColor: Colors.blue,
